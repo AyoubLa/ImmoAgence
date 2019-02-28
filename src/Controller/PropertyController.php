@@ -10,6 +10,7 @@ namespace App\Controller;
 
 
 use App\Repository\PropertyRepository;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,9 +23,13 @@ class PropertyController extends AbstractController
      */
     private $repository;
 
-    public function __construct(PropertyRepository $repository)
+    private $em;
+
+    public function __construct(PropertyRepository $repository, ObjectManager $em)
     {
         $this->repository = $repository;
+
+        $this->em = $em;
     }
 
     /**
@@ -36,9 +41,7 @@ class PropertyController extends AbstractController
      */
     public function index(): Response
     {
-        $property = $this->repository->findOneBy(['property_floor' => 4]);
-
-        dump($property);
+        $property = $this->repository->findAllVisible();
 
         return $this->render('propery/index.html.twig', ['current_page' => 'property']);
     }
