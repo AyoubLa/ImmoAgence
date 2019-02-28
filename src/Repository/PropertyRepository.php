@@ -19,7 +19,7 @@ class PropertyRepository extends ServiceEntityRepository
         parent::__construct($registry, Property::class);
     }
 
-    public function find
+
 
     // /**
     //  * @return PropertyController[] Returns an array of PropertyController objects
