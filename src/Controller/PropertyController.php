@@ -18,7 +18,7 @@ use App\Entity\Property;
 
 class PropertyController extends AbstractController
 {
-    /*
+    /**
      * @var PropertyRepository
      */
     private $repository;
@@ -41,8 +41,30 @@ class PropertyController extends AbstractController
      */
     public function index(): Response
     {
-        $property = $this->repository->findAllVisible();
+        return $this->render('property/index.html.twig', ['current_page' => 'property']);
+    }
 
-        return $this->render('propery/index.html.twig', ['current_page' => 'property']);
+    /**
+     * @Route ("/property/{slug}-{id}", name="property.show", requirements={"slug": "[a-z0-9\-]*"})
+     * @param Property $property
+     * @param String $slug
+     * @return Response
+     */
+    public function show(Property $property, String $slug)
+    {
+        $_slug = $property->getSlug();
+
+        if($_slug !== $slug) {
+
+            return $this->redirectToRoute('property.show', [
+                'id' => $property->getId(),
+                'slug' => $_slug
+            ], 301);
+        }
+        return $this->render('property/show.html.twig', [
+            'current_page' => 'property',
+            'slug' => $slug,
+            'property' => $property
+            ]);
     }
 }
